@@ -4,8 +4,8 @@
       "intent": "sendVideoIntent",
       "slots": [
         {
-          "name": "query",
-          "type": "AMAZON.LITERAL"
+          "name": "Query",
+          "type": "QUERY"
         }
       ]
     },
@@ -13,7 +13,7 @@
       "intent": "setVolumeIntent",
       "slots": [
         {
-          "name": "volume",
+          "name": "Volume",
           "type": "AMAZON.NUMBER"
         }
       ]
