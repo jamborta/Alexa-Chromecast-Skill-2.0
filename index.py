@@ -110,23 +110,15 @@ def sendVideo(intent, session):
 		card_title, speech_output, reprompt_text, should_end_session))
 
 	"""Looks up the first video in a Youtube Search"""
-	query = urllib.quote(lookupString)
-	url = "https://www.youtube.com/results?search_query=" + query
-	response = urllib2.urlopen(url)
-	html = response.read()
-	soup = BeautifulSoup(html, "html.parser")
-	for vid in soup.findAll(attrs={'class':'yt-uix-tile-link'}):
-		vidId = vid['href']
-		if "/watch?v=" not in vidId:
-			next
-		else:
-			vidId = vidId.replace("/watch?v=", "")
-			break
-	""" OPTIONAL: Uses the Youtube API to get the Video Name """
-	youtubeAPIURL = "https://www.googleapis.com/youtube/v3/videos?id="+vidId+"&key=AIzaSyB4DdmAkhKtJ6NMgSJIgMCFkVJ8KD1uBk0&fields=items(id,snippet(title),statistics)&part=snippet,statistics"
-	response = urllib.urlopen(youtubeAPIURL)
+	query = urllib.quote(lookupString.encode('utf8'))
+	youtubeAPISearchURL = """https://www.googleapis.com/youtube/v3/search?q={}&key=AIzaSyB4DdmAkhKtJ6NMgSJIgMCFkVJ8KD1uBk0&part=snippet&type=video""".format(query)
+
+	response = urllib2.urlopen(youtubeAPISearchURL)
 	data = json.loads(response.read())
+
+	vidId = data['items'][0]['id']['videoId']
 	title = data['items'][0]['snippet']['title']
+
 	if title == "":
 		title = "Video"
 
